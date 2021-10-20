@@ -1,12 +1,18 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Cells.gd" type="Script" id=1]
 [ext_resource path="res://MultiMesh.tres" type="MultiMesh" id=2]
 [ext_resource path="res://Camera.gd" type="Script" id=3]
+[ext_resource path="res://Environment.tres" type="Environment" id=4]
 
 [node name="Main" type="Spatial"]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 4 )
+
 [node name="Cellular" type="MultiMeshInstance" parent="."]
+use_in_baked_light = true
+generate_lightmap = false
 multimesh = ExtResource( 2 )
 script = ExtResource( 1 )
 
@@ -15,3 +21,8 @@ transform = Transform( 1, 0, 0, 0, 0.862399, 0.506229, 0, -0.506229, 0.862399, -
 fov = 109.0
 far = 8192.0
 script = ExtResource( 3 )
+
+[node name="DirectionalLight" type="DirectionalLight" parent="."]
+transform = Transform( -0.430212, 0, 0.902728, 0, 1, 0, -0.902728, 0, -0.430212, 44.6397, 4.46291, -28.6321 )
+light_energy = 2.45
+shadow_enabled = true

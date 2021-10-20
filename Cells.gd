@@ -79,8 +79,8 @@ class Grid:
 			for x in _height:
 				var this_cell = Cell.new(x, y)
 				this_cell.hue = rand_range(0, 1)
-				this_cell.saturation = rand_range(0.6, 1)
-				this_cell.cvalue = rand_range(0.4, 1)
+				this_cell.saturation = rand_range(0, 1)
+				this_cell.cvalue = rand_range(0, 1)
 				cells.append(this_cell)
 		set_adjacency()
 
@@ -120,9 +120,14 @@ class Grid:
 				var new_cell = Cell.new(x, y) 
 				
 				if this_cell.value == 0:
-					new_cell.value = int(this_value == 3)
+					#new_cell.value = int(this_value == 3)
+					#new_cell.value = int(this_value == 2)
+					new_cell.value = int(this_value in [3])
 				elif this_cell.value == 1:
-					new_cell.value = int(this_value == 2 || this_value == 3)
+					#new_cell.value = int(this_value == 2 || this_value == 3)
+					#new_cell.value = int(false)
+					new_cell.value = int(this_value in [2, 3])
+
 				
 				new_cell.set_color(this_cell)
 				new_cells.append(new_cell)
@@ -138,7 +143,7 @@ class Grid:
 		for c in self.cells:
 			if c.value == 1:
 				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color.from_hsv(c.hue, c.saturation, c.cvalue, 0.2))
+				multimesh.set_instance_color(i, Color.from_hsv(c.hue, c.saturation, c.cvalue, 1))
 				i += 1
 		return i
 
