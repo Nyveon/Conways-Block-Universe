@@ -4,22 +4,22 @@ Godot implementation of Conway's Game of Life with the time dimension represente
 ## Screenshots:
 
 ### Lighting:
-![Lighting 1](Screenshots/lighting_1.jpg)
-![Lighting 2](Screenshots/lighting_2.jpg)
+<img src="Screenshots/lighting_1.jpg" width="50%">
+<img src="Screenshots/lighting_2.jpg" width="50%">
 
 
 
 ### Rule Variations
 #### - B2678/S34678
-![B2678_S34678](Screenshots/B2678_S34678.jpg)
+<img src="Screenshots/B2678_S34678.jpg" width="50%">
 #### - B2/S
-![B2_S](Screenshots/B2_S.jpg)
+<img src="Screenshots/B2_S.jpg" width="50%">
 #### - B3/S012345678
-![B3_S012345678](Screenshots/B3_S012345678.jpg)
+<img src="Screenshots/B3_S012345678.jpg" width="50%">
 #### - B3/S23
-![B3_S23](Screenshots/B3_S23.jpg)
+<img src="Screenshots/B3_S23.jpg" width="50%">
 #### - B4678/S35678
-![B4678_S35678](Screenshots/B4678_S35678.jpg)
+<img src="Screenshots/B4678_S35678.jpg" width="50%">
 
 
 
