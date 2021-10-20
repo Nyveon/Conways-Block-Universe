@@ -1,4 +1,4 @@
-extends MultiMeshInstance
+extends Spatial
 
 
 # Represents a single cell of the cellular automata
@@ -37,17 +37,29 @@ class Cell:
 		return atan2(hue_sin_sum/n, hue_cos_sum/n)/(PI * 2)
 			
 
+
 class Grid:
 	var cells = Array()
 	var _width = 0
 	var _height = 0
 	var _size = 0
 	var _null_cell = Cell.new(0, 0)
+	var _template_mesh = null
+	var _mmi = MultiMeshInstance.new()
+	var _mm = MultiMesh.new()
 	
-	func _init(width: int, height: int):
+	func _init(width: int, height: int, template_mesh):
 		_width = width
 		_height= height
 		_size = width * height
+		
+		_template_mesh = template_mesh
+		_mmi = template_mesh.duplicate()
+		_mmi.name = str(randf())
+		_mm = template_mesh.multimesh.duplicate()
+		_mmi.multimesh = _mm
+
+
 		
 
 	# Create the grid's adjacency map
@@ -115,20 +127,22 @@ class Grid:
 				new_cell.hue = this_cell.get_neighbor_hue()
 				new_cells.append(new_cell)
 		
-		var new_grid = Grid.new(_width, _height)
+		var new_grid = Grid.new(_width, _height, _template_mesh)
 		new_grid.cells = new_cells
 		new_grid.set_adjacency()
 		return new_grid
 	
 	
-	func render_grid(multimesh, depth, start) -> int:
-		var i = start
+	func render_grid(depth, start):
+		_mm.set_instance_count(_size*_width)
+		
+		var i = 0
 		for c in self.cells:
 			if c.value == 1:
-				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1))
+				_mm.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
+				_mm.set_instance_color(i, Color.from_hsv(c.hue, 1, 1, 0.1))
 				i += 1
-		return i
+		return _mmi
 
 	
 var previous = null
@@ -136,7 +150,7 @@ var used_instances = 0
 var l = 0
 func _ready():
 	print("here")
-	var g = Grid.new(30, 30)
+	var g = Grid.new(30, 30, $Template)
 	g.populate_empty()
 	
 	# Glider
@@ -150,9 +164,9 @@ func _ready():
 	for e in 30*30:
 		g.cells[e].value = min(randi() % 2, randi() % 2)
 	
-	multimesh.set_instance_count(10000)
-	used_instances = g.render_grid(self.multimesh, l, used_instances)
-	l += 1	
+	
+	add_child(g.render_grid(l, used_instances))
+	l += 1
 	previous = g
 
 
@@ -169,6 +183,6 @@ func _input(event):
 			KEY_F:
 				if event.is_pressed() and not event.is_echo():
 					var next = previous.next_step()
-					used_instances = next.render_grid(self.multimesh, l, used_instances)
+					add_child(next.render_grid(l, used_instances))
 					previous = next
 					l += 1

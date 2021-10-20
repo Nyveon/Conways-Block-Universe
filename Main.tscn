@@ -6,9 +6,11 @@
 
 [node name="Main" type="Spatial"]
 
-[node name="Cellular" type="MultiMeshInstance" parent="."]
-multimesh = ExtResource( 2 )
+[node name="Cellular" type="Spatial" parent="."]
 script = ExtResource( 1 )
+
+[node name="Template" type="MultiMeshInstance" parent="Cellular"]
+multimesh = ExtResource( 2 )
 
 [node name="Camera" type="Camera" parent="."]
 transform = Transform( 1, 0, 0, 0, 0.862399, 0.506229, 0, -0.506229, 0.862399, -0.754595, 6.44845, 8.67093 )
