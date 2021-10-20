@@ -126,7 +126,7 @@ class Grid:
 		for c in self.cells:
 			if c.value == 1:
 				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1))
+				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1, 0.5))
 				i += 1
 		return i
 

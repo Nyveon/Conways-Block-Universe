@@ -1,4 +1,14 @@
-[gd_resource type="SpatialMaterial" format=2]
+[gd_resource type="SpatialMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://3d_pixel_perfect_outline.shader" type="Shader" id=1]
+
+[sub_resource type="ShaderMaterial" id=1]
+shader = ExtResource( 1 )
+shader_param/albedo = null
+shader_param/outline_width = 1.0
 
 [resource]
+next_pass = SubResource( 1 )
+flags_transparent = true
+flags_vertex_lighting = true
 vertex_color_use_as_albedo = true
