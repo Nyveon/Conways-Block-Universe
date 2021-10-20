@@ -126,7 +126,7 @@ class Grid:
 		for c in self.cells:
 			if c.value == 1:
 				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1, 0.5))
+				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1, 0.2))
 				i += 1
 		return i
 
@@ -134,9 +134,12 @@ class Grid:
 var previous = null
 var used_instances = 0
 var l = 0
+var max_instances = 1
+var MAX_MAX = 200000
 func _ready():
 	print("here")
-	var g = Grid.new(30, 30)
+	var s = 100
+	var g = Grid.new(s, s)
 	g.populate_empty()
 	
 	# Glider
@@ -147,10 +150,11 @@ func _ready():
 	g.get_cell(5, 6).value = 1
 	
 	
-	for e in 30*30:
-		g.cells[e].value = min(randi() % 2, randi() % 2)
+	for e in s*s:
+		g.cells[e].value = max((randi() % 6) - 4, 0)
 	
-	multimesh.set_instance_count(10000)
+	max_instances = MAX_MAX - (s*s)
+	multimesh.set_instance_count(MAX_MAX)
 	used_instances = g.render_grid(self.multimesh, l, used_instances)
 	l += 1	
 	previous = g
@@ -161,6 +165,13 @@ func _ready():
 	
 	pass
 
+func _process(delta):
+	
+	if used_instances < max_instances:
+		var next = previous.next_step()
+		used_instances = next.render_grid(self.multimesh, l, used_instances)
+		previous = next
+		l += 1		
 
 func _input(event):
 		# Receives key input
