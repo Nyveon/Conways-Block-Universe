@@ -8,6 +8,8 @@ class Cell:
 	var x = 0
 	var y = 0
 	var hue = 0
+	var saturation = 0
+	var cvalue = 0
 	
 	func _init(_x: int, _y: int):
 		self.x = _x
@@ -20,21 +22,29 @@ class Cell:
 			sum += other_cell.value
 		return sum
 	
-	func get_neighbor_hue():
+	# Sets the color based on another cell's color calculation
+	func set_color(other):
 		var hue_sin_sum = 0
 		var hue_cos_sum = 0
+		var saturation_sum = 0
+		var cvalue_sum = 0
 		var n = 0
 		
-		for other_cell in neighbors:
+		for other_cell in other.neighbors:
 			if other_cell.value == 1:
 				hue_sin_sum += sin(other_cell.hue * 2 * PI)
 				hue_cos_sum += cos(other_cell.hue * 2 * PI)
+				saturation_sum += other_cell.saturation
+				cvalue_sum += other_cell.cvalue
 				n += 1
 				
 		if n == 0:
 			return 0
 		
-		return atan2(hue_sin_sum/n, hue_cos_sum/n)/(PI * 2)
+		hue = atan2(hue_sin_sum/n, hue_cos_sum/n)/(PI * 2)
+		saturation = saturation_sum/n
+		cvalue = cvalue_sum/n
+
 			
 
 class Grid:
@@ -69,6 +79,8 @@ class Grid:
 			for x in _height:
 				var this_cell = Cell.new(x, y)
 				this_cell.hue = rand_range(0, 1)
+				this_cell.saturation = rand_range(0.6, 1)
+				this_cell.cvalue = rand_range(0.4, 1)
 				cells.append(this_cell)
 		set_adjacency()
 
@@ -111,8 +123,8 @@ class Grid:
 					new_cell.value = int(this_value == 3)
 				elif this_cell.value == 1:
 					new_cell.value = int(this_value == 2 || this_value == 3)
-
-				new_cell.hue = this_cell.get_neighbor_hue()
+				
+				new_cell.set_color(this_cell)
 				new_cells.append(new_cell)
 		
 		var new_grid = Grid.new(_width, _height)
@@ -126,7 +138,7 @@ class Grid:
 		for c in self.cells:
 			if c.value == 1:
 				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1, 0.2))
+				multimesh.set_instance_color(i, Color.from_hsv(c.hue, c.saturation, c.cvalue, 0.2))
 				i += 1
 		return i
 
