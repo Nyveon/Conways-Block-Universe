@@ -1,14 +1,15 @@
 [gd_resource type="MultiMesh" load_steps=3 format=2]
 
-[sub_resource type="SpatialMaterial" id=2]
-flags_vertex_lighting = true
-albedo_color = Color( 0.00392157, 0.611765, 0.0980392, 1 )
+[ext_resource path="res://Material.tres" type="Material" id=1]
 
-[sub_resource type="CubeMesh" id=1]
-material = SubResource( 2 )
+[sub_resource type="CubeMesh" id=2]
+material = ExtResource( 1 )
 size = Vector3( 1, 0.5, 1 )
 
 [resource]
 color_format = 2
 transform_format = 1
-mesh = SubResource( 1 )
+instance_count = 1
+mesh = SubResource( 2 )
+transform_array = PoolVector3Array( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+color_array = PoolColorArray( 1, 1, 1, 1 )

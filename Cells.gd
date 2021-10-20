@@ -7,6 +7,7 @@ class Cell:
 	var value = 0
 	var x = 0
 	var y = 0
+	var hue = 0
 	
 	func _init(_x: int, _y: int):
 		self.x = _x
@@ -18,6 +19,23 @@ class Cell:
 		for other_cell in neighbors:
 			sum += other_cell.value
 		return sum
+	
+	func get_neighbor_hue():
+		var hue_sin_sum = 0
+		var hue_cos_sum = 0
+		var n = 0
+		
+		for other_cell in neighbors:
+			if other_cell.value == 1:
+				hue_sin_sum += sin(other_cell.hue * 2 * PI)
+				hue_cos_sum += cos(other_cell.hue * 2 * PI)
+				n += 1
+				
+		if n == 0:
+			return 0
+		
+		return atan2(hue_sin_sum/n, hue_cos_sum/n)/(PI * 2)
+			
 
 class Grid:
 	var cells = Array()
@@ -49,7 +67,9 @@ class Grid:
 		# Populate the grid
 		for y in _width:
 			for x in _height:
-				cells.append(Cell.new(x, y))
+				var this_cell = Cell.new(x, y)
+				this_cell.hue = rand_range(0, 1)
+				cells.append(this_cell)
 		set_adjacency()
 
 
@@ -92,7 +112,7 @@ class Grid:
 				elif this_cell.value == 1:
 					new_cell.value = int(this_value == 2 || this_value == 3)
 
-				
+				new_cell.hue = this_cell.get_neighbor_hue()
 				new_cells.append(new_cell)
 		
 		var new_grid = Grid.new(_width, _height)
@@ -106,7 +126,7 @@ class Grid:
 		for c in self.cells:
 			if c.value == 1:
 				multimesh.set_instance_transform(i, Transform(Basis(), Vector3(c.x, depth, c.y)))
-				multimesh.set_instance_color(i, Color(255, 255, 255, 0.1))
+				multimesh.set_instance_color(i, Color.from_hsv(c.hue, 1, 1))
 				i += 1
 		return i
 
@@ -147,7 +167,8 @@ func _input(event):
 	if event is InputEventKey:
 		match event.scancode:
 			KEY_F:
-				var next = previous.next_step()
-				used_instances = next.render_grid(self.multimesh, l, used_instances)
-				previous = next
-				l += 1
+				if event.is_pressed() and not event.is_echo():
+					var next = previous.next_step()
+					used_instances = next.render_grid(self.multimesh, l, used_instances)
+					previous = next
+					l += 1
