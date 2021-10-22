@@ -152,7 +152,7 @@ var previous = null
 var used_instances = 0
 var l = 0
 var max_instances = 1
-var MAX_MAX = 200000
+var MAX_MAX = 1000000
 func _ready():
 	print("here")
 	var s = 100
@@ -183,20 +183,20 @@ func _ready():
 	pass
 
 func _process(delta):
-	
-	if used_instances < max_instances:
-		var next = previous.next_step()
-		used_instances = next.render_grid(self.multimesh, l, used_instances)
-		previous = next
-		l += 1		
+	pass
+#	if used_instances < max_instances:
+#		var next = previous.next_step()
+#		used_instances = next.render_grid(self.multimesh, l, used_instances)
+#		previous = next
+#		l += 1		
 
 func _input(event):
 		# Receives key input
 	if event is InputEventKey:
 		match event.scancode:
 			KEY_F:
-				if event.is_pressed() and not event.is_echo():
+				if used_instances < max_instances:
 					var next = previous.next_step()
 					used_instances = next.render_grid(self.multimesh, l, used_instances)
 					previous = next
-					l += 1
+					l += 1	

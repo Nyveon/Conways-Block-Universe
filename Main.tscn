@@ -23,6 +23,6 @@ far = 8192.0
 script = ExtResource( 3 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( -0.430212, 0, 0.902728, 0, 1, 0, -0.902728, 0, -0.430212, 44.6397, 4.46291, -28.6321 )
-light_energy = 2.45
+transform = Transform( -0.430212, 0, 0.902728, 0, 1, 0, -0.902728, 0, -0.430212, 70.4156, 27.7479, -43.8214 )
+light_energy = 16.0
 shadow_enabled = true
